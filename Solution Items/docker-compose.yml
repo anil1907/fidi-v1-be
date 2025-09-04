@@ -1,0 +1,94 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: src/VsaSample.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=VsaSample;User Id=sa;Password=Your_password123;TrustServerCertificate=true"
+      Redis__Configuration: "redis:6379"
+      ELASTIC_URL: &elastic-url https://elasticsearch:9200
+      ElasticConfiguration__Url: *elastic-url
+      ElasticConfiguration__Index: api-index
+      Serilog__WriteTo__1__Args__nodeUris: *elastic-url
+      ElasticConfiguration__Username: elastic
+      ElasticConfiguration__Password: admin
+      Serilog__WriteTo__1__Args__username: elastic
+      Serilog__WriteTo__1__Args__password: admin
+    depends_on:
+      - sqlserver
+      - redis
+      - elasticsearch
+    networks:
+      - vsa-net
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123
+    ports:
+      - "1433:1433"
+    networks:
+      - vsa-net
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - vsa-net
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.3
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=admin
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - vsa-net
+  elastic-init:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.3
+    depends_on:
+      - elasticsearch
+    volumes:
+      - es-token:/token
+    entrypoint: >
+      bash -c "\
+        until curl -s --cacert /usr/share/elasticsearch/config/certs/http_ca.crt https://elasticsearch:9200 >/dev/null; do sleep 1; done; \
+        bin/elasticsearch-create-enrollment-token --scope kibana > /token/kibana.token; \
+        cp /usr/share/elasticsearch/config/certs/http_ca.crt /token/ca.crt; \
+        curl --cacert /usr/share/elasticsearch/config/certs/http_ca.crt -u elastic:admin -X PUT https://elasticsearch:9200/api-index; \
+      "
+    networks:
+      - vsa-net
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.1.3
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elastic-init
+    volumes:
+      - es-token:/token:ro
+    environment:
+      ELASTICSEARCH_HOSTS: https://elasticsearch:9200
+      ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: /token/ca.crt
+    command: >
+      /bin/bash -c "
+        until [ -f /token/kibana.token ]; do sleep 1; done;
+        kibana --enrollment-token $(cat /token/kibana.token)
+      "
+    networks:
+      - vsa-net
+networks:
+  vsa-net:
+    driver: bridge
+volumes:
+  sqlserver-data:
+    driver: local
+  es-token:
+    driver: local

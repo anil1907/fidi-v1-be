@@ -1,0 +1,38 @@
+namespace VsaSample.Api.Endpoints.v2;
+
+internal sealed class Users : EndpointGroupBase
+{
+    public override void Map(IEndpointRouteBuilder app)
+    {
+        var route = MapGroup(app)
+            .MapToApiVersion(ApiEndpoints.V2);
+
+        route.MapPost("/login",
+                async (LoginUserCommand command, ICommandHandler<LoginUserCommand, LoginUserResponse> handler,
+                    CancellationToken ct) =>
+                {
+                    var result = await handler.Handle(command, ct);
+                    return result.ToHttpResponse();
+                })
+            .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Users.Login, ApiEndpoints.V2))
+            .Produces<LoginUserResponse>()
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status400BadRequest)
+            .AcceptsJson<LoginUserCommand>()
+            .AllowAnonymous();
+
+        route.MapPost("/register",
+                async (RegisterUserCommand command, ICommandHandler<RegisterUserCommand, long> handler,
+                    CancellationToken ct) =>
+                {
+                    var result = await handler.Handle(command, ct);
+                    return result.ToHttpResponse();
+                })
+            .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Users.Register, ApiEndpoints.V2))
+            .Produces<long>()
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status400BadRequest)
+            .AcceptsJson<RegisterUserCommand>()
+            .AllowAnonymous();
+    }
+}

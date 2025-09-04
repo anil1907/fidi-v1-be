@@ -1,0 +1,82 @@
+version: "3"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/VsaSample.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=VsaSample;User Id=sa;Password=Your_password123;TrustServerCertificate=true"
+      Redis__Configuration: "redis:6379"
+      ELASTIC_URL: &elastic-url http://elasticsearch:9200
+      ElasticConfiguration__Url: *elastic-url
+      ElasticConfiguration__Index: api-index
+      Serilog__WriteTo__1__Args__nodeUris: *elastic-url
+      ElasticConfiguration__Username: elastic
+      ElasticConfiguration__Password: 123456789
+      Serilog__WriteTo__1__Args__username: elastic
+      Serilog__WriteTo__1__Args__password: 123456789
+    depends_on:
+      - sqlserver
+      - redis
+      - elasticsearch
+    networks:
+      - elastic
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123
+    ports:
+      - "1433:1433"
+    networks:
+      - elastic
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+  redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - elastic
+  elasticsearch:
+    image: docker.arvancloud.ir/elasticsearch:7.16.3
+    container_name: elasticsearch
+    environment:
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=123456789
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elastic
+  kibana:
+    image: docker.arvancloud.ir/kibana:7.16.3
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=123456789
+      - xpack.security.user=elastic
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic
+    depends_on:
+      - elasticsearch
+networks:
+  elastic:
+    driver: bridge
+volumes:
+  sqlserver-data:
+    driver: local
