@@ -36,6 +36,7 @@ public static class DependencyInjection
             //     .AddInterceptors(sp.GetRequiredService<SlowCommandInterceptor>())
             //     .UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>())
             //     .EnableSensitiveDataLogging();
+
             options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
             options.AddInterceptors(sp.GetRequiredService<SlowCommandInterceptor>());
         });
