@@ -17,7 +17,7 @@ public static class SubCategoryConstants
         private const string EntityNameEn = "Sub category";
         private const string EntityNameTr = "alt kategori";
 
-        public static Error NotFoundById(long id) => Error.NotFound(
+        public static Error NotFoundById(Guid id) => Error.NotFound(
                 "SubCategory.NotFound",
                 CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, id, Cultures.En))
             .WithDescription(Cultures.Tr, CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, id, Cultures.Tr))
@@ -36,4 +36,3 @@ public static class SubCategoryConstants
             .WithDescription(Cultures.En, CommonErrors.EntityNotFoundByName(EntityNameEn, EntityNameTr, Cultures.En));
     }
 }
-

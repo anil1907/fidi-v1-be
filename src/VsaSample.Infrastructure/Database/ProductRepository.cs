@@ -21,7 +21,7 @@ public sealed class ProductRepository : IProductRepository
 
     public IQueryable<Product> Query => _set.AsNoTracking();
 
-    public Task<Product?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+    public Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var cacheKey = _tags.ById.Replace("{Id}", id.ToString());
         return _cache.GetOrCreateAsync(
@@ -34,7 +34,7 @@ public sealed class ProductRepository : IProductRepository
             .AsTask();
     }
 
-    public async Task<long> AddAsync(Product entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Product entity, CancellationToken cancellationToken = default)
     {
         await _set.AddAsync(entity, cancellationToken);
         await _db.SaveChangesAsync(cancellationToken);

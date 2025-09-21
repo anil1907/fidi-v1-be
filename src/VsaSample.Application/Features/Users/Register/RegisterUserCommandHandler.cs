@@ -3,13 +3,13 @@ namespace VsaSample.Application.Features.Users.Register;
 public sealed class RegisterUserCommandHandler(
     IApplicationDbContext context,
     IPasswordHasher<User> passwordHasher)
-    : ICommandHandler<RegisterUserCommand, long>
+    : ICommandHandler<RegisterUserCommand, Guid>
 {
-    public async Task<Result<long>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         if (await context.Users.AnyAsync(u => u.Email == command.Email || u.Username.Equals(command.Username), cancellationToken))
         {
-            return Result<long>.Failure(
+            return Result<Guid>.Failure(
                 UserConstants.Errors.EmailNotUnique.Localize(command.Culture));
         }
 
@@ -29,6 +29,6 @@ public sealed class RegisterUserCommandHandler(
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return Result<long>.Success(user.Id);
+        return Result<Guid>.Success(user.Id);
     }
 }

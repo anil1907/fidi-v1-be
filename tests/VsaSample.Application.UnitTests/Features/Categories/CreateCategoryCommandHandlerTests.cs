@@ -13,9 +13,10 @@ public class CreateCategoryCommandHandlerTests
     public async Task Handle_ShouldCreateCategory()
     {
         var repository = new Mock<ICategoryRepository>();
+        var newId = Guid.NewGuid();
         repository
             .Setup(r => r.AddAsync(It.IsAny<Category>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(1);
+            .ReturnsAsync(newId);
         var logger = new Mock<ILogger<CreateCategoryCommandHandler>>();
         var handler = new CreateCategoryCommandHandler(repository.Object, logger.Object);
         var command = new CreateCategoryCommand("NewCat");
@@ -23,7 +24,7 @@ public class CreateCategoryCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
-        Assert.Equal(1, result.Value);
+        Assert.Equal(newId, result.Value);
         repository.Verify(r => r.AddAsync(It.Is<Category>(c => c.Name == "NewCat"), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

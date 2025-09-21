@@ -1,9 +1,9 @@
 namespace VsaSample.Application.Features.Products.Create;
 
 public sealed class CreateProductCommandHandler(IProductRepository repository, ILogger<CreateProductCommandHandler> logger)
-    : ICommandHandler<CreateProductCommand, long>
+    : ICommandHandler<CreateProductCommand, Guid>
 {
-    public async Task<Result<long>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateProductCommand command, CancellationToken cancellationToken)
     {
         var entity = new Product
         {
@@ -25,6 +25,6 @@ public sealed class CreateProductCommandHandler(IProductRepository repository, I
         var id = await repository.AddAsync(entity, cancellationToken);
 
         logger.LogInformation("Product created with Id {Id} (SKU: {Sku})", id, entity.Sku);
-        return Result<long>.Success(id);
+        return Result<Guid>.Success(id);
     }
 }

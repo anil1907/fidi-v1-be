@@ -16,19 +16,19 @@ public class Products : EndpointGroupBase
             .MapToApiVersion(ApiEndpoints.V1);
 
         route.MapPost("",
-                async (CreateProductCommand cmd, ICommandHandler<CreateProductCommand, long> handler,
+                async (CreateProductCommand cmd, ICommandHandler<CreateProductCommand, Guid> handler,
                         CancellationToken ct) =>
                     (await handler.Handle(cmd, ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Products.CreateProduct, ApiEndpoints.V1))
-            .Produces<long>()
+            .Produces<Guid>()
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
             .AcceptsJson<CreateProductCommand>()
             .HasPermission(Permissions.Policy(ProductsFeature.Permissions.Instance.Create));
 
-        route.MapDelete("/{id:long}",
-                async (long id, ICommandHandler<DeleteProductCommand> handler, CancellationToken ct) =>
+        route.MapDelete("/{id:guid}",
+                async (Guid id, ICommandHandler<DeleteProductCommand> handler, CancellationToken ct) =>
                     (await handler.Handle(new DeleteProductCommand(id), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Products.DeleteProduct, ApiEndpoints.V1))
             .Produces(StatusCodes.Status200OK)
@@ -54,8 +54,8 @@ public class Products : EndpointGroupBase
             .Produces(StatusCodes.Status403Forbidden)
             .HasPermission(Permissions.Policy(ProductsFeature.Permissions.Instance.Read));
 
-        route.MapGet("/{id:long}",
-                async (long id, string? culture, IQueryHandler<GetProductByIdQuery, ProductResponse> handler,
+        route.MapGet("/{id:guid}",
+                async (Guid id, string? culture, IQueryHandler<GetProductByIdQuery, ProductResponse> handler,
                     CancellationToken ct) =>
                 {
                     var reqCulture = culture ?? Cultures.Default;
@@ -71,7 +71,7 @@ public class Products : EndpointGroupBase
             .Produces(StatusCodes.Status403Forbidden)
             .HasPermission(Permissions.Policy(ProductsFeature.Permissions.Instance.Read));
 
-        route.MapPut("/{id:long}/translations/{culture}", async (long id, string culture, UpdateProduct body,
+        route.MapPut("/{id:guid}/translations/{culture}", async (Guid id, string culture, UpdateProduct body,
                 ICommandHandler<UpdateProductCommand> handler, CancellationToken ct) =>
             {
                 var cmd = new UpdateProductCommand(id, culture, body.Name, body.Description);

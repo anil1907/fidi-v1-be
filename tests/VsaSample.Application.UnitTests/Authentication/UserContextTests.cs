@@ -10,9 +10,10 @@ public class UserContextTests
     [Fact]
     public void ShouldReturnUserDataFromClaims()
     {
+        var userId = Guid.NewGuid();
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, "5"),
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim("Username", "tester")
         };
         var principal = new ClaimsPrincipal(new ClaimsIdentity(claims));
@@ -20,7 +21,7 @@ public class UserContextTests
         var accessor = new HttpContextAccessor { HttpContext = httpContext };
         var context = new UserContext(accessor);
 
-        Assert.Equal(5, context.UserId);
+        Assert.Equal(userId, context.UserId);
         Assert.Equal("tester", context.Username);
     }
 }

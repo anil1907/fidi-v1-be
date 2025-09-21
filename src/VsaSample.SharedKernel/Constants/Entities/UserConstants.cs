@@ -7,7 +7,7 @@ public static class UserConstants
         private const string EntityNameEn = "User";
         private const string EntityNameTr = "Kullanıcı";
 
-        public static Error NotFound(long userId) => Error.NotFound(
+        public static Error NotFound(Guid userId) => Error.NotFound(
                 "Users.NotFound",
                 CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, userId, Cultures.En))
             .WithDescription(Cultures.Tr, CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, userId, Cultures.Tr))

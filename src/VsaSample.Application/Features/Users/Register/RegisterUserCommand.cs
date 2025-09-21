@@ -6,7 +6,7 @@ public sealed record RegisterUserCommand(
     string LastName,
     string Username,
     string Password,
-    UserRole Role) : ICommand<long>
+    UserRole Role) : ICommand<Guid>
 {
     public string Culture { get; init; } = Cultures.Default;
 }

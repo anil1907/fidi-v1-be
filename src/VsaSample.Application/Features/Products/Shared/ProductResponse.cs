@@ -2,7 +2,7 @@ namespace VsaSample.Application.Features.Products.Shared;
 
 public sealed record ProductResponse
 {
-    public long Id { get; init; }
+    public Guid Id { get; init; }
     public string Sku { get; init; } = null!;
     public decimal Price { get; init; }
     public bool IsActive { get; init; }

@@ -2,11 +2,11 @@ namespace VsaSample.Infrastructure.Authentication;
 
 internal static class ClaimsPrincipalExtensions
 {
-    public static long GetUserId(this ClaimsPrincipal? principal)
+    public static Guid GetUserId(this ClaimsPrincipal? principal)
     {
         var userId = principal?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        return long.TryParse(userId, out var parsedUserId) ? parsedUserId : 0;
+        return Guid.TryParse(userId, out var parsedUserId) ? parsedUserId : Guid.Empty;
         // throw new ApplicationException("User id is unavailable");
     }
     

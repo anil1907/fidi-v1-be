@@ -22,14 +22,14 @@ internal sealed class Users : EndpointGroupBase
             .AllowAnonymous();
 
         route.MapPost("/register",
-                async (RegisterUserCommand command, ICommandHandler<RegisterUserCommand, long> handler,
+                async (RegisterUserCommand command, ICommandHandler<RegisterUserCommand, Guid> handler,
                     CancellationToken ct) =>
                 {
                     var result = await handler.Handle(command, ct);
                     return result.ToHttpResponse();
                 })
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Users.Register, ApiEndpoints.V2))
-            .Produces<long>()
+            .Produces<Guid>()
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status400BadRequest)
             .AcceptsJson<RegisterUserCommand>()

@@ -9,7 +9,7 @@ internal sealed class CreateSubCategoryCommandValidator : AbstractValidator<Crea
             .NotNull();
 
         RuleFor(x => x.CategoryId)
-            .GreaterThan(0);
+            .NotEmpty();
     }
 }
 

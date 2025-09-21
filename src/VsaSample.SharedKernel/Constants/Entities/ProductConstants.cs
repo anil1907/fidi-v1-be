@@ -7,7 +7,7 @@ public static class ProductConstants
         private const string EntityNameEn = "Product";
         private const string EntityNameTr = "Ürün";
 
-        public static Error NotFoundById(long id) => Error.NotFound(
+        public static Error NotFoundById(Guid id) => Error.NotFound(
                 "Product.NotFoundById",
                 CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, id, Cultures.En))
             .WithDescription(Cultures.Tr, CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, id, Cultures.Tr))
@@ -26,4 +26,3 @@ public static class ProductConstants
             .WithDescription(Cultures.En, CommonErrors.EntityNotFoundByName(EntityNameEn, EntityNameTr, Cultures.En));
     }
 }
-

@@ -7,7 +7,7 @@ public static class CategoryConstants
         private const string EntityNameEn = "Category";
         private const string EntityNameTr = "Kategori";
 
-        public static Error NotFoundById(long id) => Error.NotFound(
+        public static Error NotFoundById(Guid id) => Error.NotFound(
                 "Category.NotFound",
                 CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, id, Cultures.En))
             .WithDescription(Cultures.Tr, CommonErrors.EntityNotFoundById(EntityNameEn, EntityNameTr, id, Cultures.Tr))
@@ -41,4 +41,3 @@ public static class CategoryConstants
             .WithDescription(Cultures.En, string.Format(Messages.CategoryNotFoundByNameEn, row, categoryName));
     }
 }
-

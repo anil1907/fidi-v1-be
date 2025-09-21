@@ -16,11 +16,11 @@ public class Categories : EndpointGroupBase
             .MapToApiVersion(ApiEndpoints.V1);
 
         route.MapPost("",
-                async (CreateCategoryCommand cmd, ICommandHandler<CreateCategoryCommand, long> handler,
+                async (CreateCategoryCommand cmd, ICommandHandler<CreateCategoryCommand, Guid> handler,
                         CancellationToken ct) =>
                     (await handler.Handle(cmd, ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Categories.CreateCategory, ApiEndpoints.V1))
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
@@ -28,8 +28,8 @@ public class Categories : EndpointGroupBase
             .AcceptsJson<CreateCategoryCommand>()
             .HasPermission(Permissions.Policy(CategoriesFeature.Permissions.Instance.Create));
 
-        route.MapDelete("/{id:long}",
-                async (long id, ICommandHandler<DeleteCategoryCommand> handler, CancellationToken ct) =>
+        route.MapDelete("/{id:guid}",
+                async (Guid id, ICommandHandler<DeleteCategoryCommand> handler, CancellationToken ct) =>
                     (await handler.Handle(new DeleteCategoryCommand(id), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Categories.DeleteCategory, ApiEndpoints.V1))
             .Produces(StatusCodes.Status200OK)
@@ -52,8 +52,8 @@ public class Categories : EndpointGroupBase
             .Produces(StatusCodes.Status403Forbidden)
             .HasPermission(Permissions.Policy(CategoriesFeature.Permissions.Instance.Read));
 
-        route.MapGet("/{id:long}",
-                async (long id, IQueryHandler<GetCategoryByIdQuery, CategoryResponse> handler, CancellationToken ct) =>
+        route.MapGet("/{id:guid}",
+                async (Guid id, IQueryHandler<GetCategoryByIdQuery, CategoryResponse> handler, CancellationToken ct) =>
                     (await handler.Handle(new GetCategoryByIdQuery(id), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Categories.GetCategoryById, ApiEndpoints.V1))
             .Produces<CategoryResponse>()
@@ -63,8 +63,8 @@ public class Categories : EndpointGroupBase
             .Produces(StatusCodes.Status403Forbidden)
             .HasPermission(Permissions.Policy(CategoriesFeature.Permissions.Instance.Read));
 
-        route.MapPut("{id:long}",
-                async (long id, UpdateCategoryBody body, ICommandHandler<UpdateCategoryCommand> handler,
+        route.MapPut("{id:guid}",
+                async (Guid id, UpdateCategoryBody body, ICommandHandler<UpdateCategoryCommand> handler,
                         CancellationToken ct) =>
                     (await handler.Handle(new UpdateCategoryCommand(id, body.Name), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.Categories.UpdateCategory, ApiEndpoints.V1))

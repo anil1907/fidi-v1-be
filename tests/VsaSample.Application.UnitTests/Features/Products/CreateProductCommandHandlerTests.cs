@@ -13,9 +13,10 @@ public class CreateProductCommandHandlerTests
     public async Task Handle_ShouldCreateProduct()
     {
         var repository = new Mock<IProductRepository>();
+        var newId = Guid.NewGuid();
         repository
             .Setup(r => r.AddAsync(It.IsAny<Product>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(1);
+            .ReturnsAsync(newId);
         var logger = new Mock<ILogger<CreateProductCommandHandler>>();
         var handler = new CreateProductCommandHandler(repository.Object, logger.Object);
         var command = new CreateProductCommand("sku", 10m, true, "en", new List<CreateProductTranslation>());
@@ -23,7 +24,7 @@ public class CreateProductCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
-        Assert.Equal(1, result.Value);
+        Assert.Equal(newId, result.Value);
         repository.Verify(r => r.AddAsync(It.Is<Product>(p => p.Sku == "sku"), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

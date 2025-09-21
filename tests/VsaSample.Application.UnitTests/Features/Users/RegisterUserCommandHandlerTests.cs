@@ -23,6 +23,7 @@ public class RegisterUserCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
+        Assert.NotEqual(Guid.Empty, result.Value);
         var savedUser = await context.Users.SingleAsync();
         Assert.Equal(UserRole.Admin, savedUser.Role);
         Assert.NotEqual(command.Password, savedUser.PasswordHash);

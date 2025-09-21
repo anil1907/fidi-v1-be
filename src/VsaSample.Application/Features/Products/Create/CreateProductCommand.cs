@@ -6,6 +6,6 @@ public sealed record CreateProductCommand(
     bool IsActive,
     string DefaultCulture,
     List<CreateProductTranslation> Translations
-) : ICommand<long>;
+) : ICommand<Guid>;
 
 public sealed record CreateProductTranslation(string Culture, string Name, string? Description);

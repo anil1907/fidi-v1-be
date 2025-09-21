@@ -1,3 +1,3 @@
 namespace VsaSample.Application.Features.Categories.Delete;
 
-public sealed record DeleteCategoryCommand(long Id) : ICommand;
+public sealed record DeleteCategoryCommand(Guid Id) : ICommand;

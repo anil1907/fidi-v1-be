@@ -9,7 +9,7 @@ public sealed class Product : BaseEntity, ITranslatable<ProductTranslation>
     public decimal Price { get; set; }
 
     // Foreign key and reference navigation
-    public long CategoryId { get; set; }
+    public Guid CategoryId { get; set; }
     public Category Category { get; set; } = null!;
 
     // Collection navigation

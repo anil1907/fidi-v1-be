@@ -18,19 +18,19 @@ public class SubCategories : EndpointGroupBase
             .MapToApiVersion(ApiEndpoints.V1);
 
         route.MapPost("",
-                async (CreateSubCategoryCommand cmd, ICommandHandler<CreateSubCategoryCommand, long> handler,
+                async (CreateSubCategoryCommand cmd, ICommandHandler<CreateSubCategoryCommand, Guid> handler,
                         CancellationToken ct) =>
                     (await handler.Handle(cmd, ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.SubCategories.CreateSubCategory, ApiEndpoints.V1))
-            .Produces<long>(StatusCodes.Status201Created)
+            .Produces<Guid>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
             .AcceptsJson<CreateSubCategoryCommand>()
             .HasPermission(Permissions.Policy(SubCategoriesFeature.Permissions.Instance.Create));
 
-        route.MapDelete("/{id:long}",
-                async (long id, ICommandHandler<DeleteSubCategoryCommand> handler, CancellationToken ct) =>
+        route.MapDelete("/{id:guid}",
+                async (Guid id, ICommandHandler<DeleteSubCategoryCommand> handler, CancellationToken ct) =>
                     (await handler.Handle(new DeleteSubCategoryCommand(id), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.SubCategories.DeleteSubCategory, ApiEndpoints.V1))
             .Produces(StatusCodes.Status200OK)
@@ -52,8 +52,8 @@ public class SubCategories : EndpointGroupBase
             .Produces(StatusCodes.Status403Forbidden)
             .HasPermission(Permissions.Policy(SubCategoriesFeature.Permissions.Instance.Read));
 
-        route.MapGet("/{id:long}",
-                async (long id, IQueryHandler<GetSubCategoryByIdQuery, SubCategoryResponse> handler,
+        route.MapGet("/{id:guid}",
+                async (Guid id, IQueryHandler<GetSubCategoryByIdQuery, SubCategoryResponse> handler,
                         CancellationToken ct) =>
                     (await handler.Handle(new GetSubCategoryByIdQuery(id), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.SubCategories.GetSubCategoryById, ApiEndpoints.V1))
@@ -65,8 +65,8 @@ public class SubCategories : EndpointGroupBase
             .Produces(StatusCodes.Status403Forbidden)
             .HasPermission(Permissions.Policy(SubCategoriesFeature.Permissions.Instance.Read));
 
-        route.MapPut("{id:long}",
-                async (long id, UpdateSubCategoryBody body, ICommandHandler<UpdateSubCategoryCommand> handler,
+        route.MapPut("{id:guid}",
+                async (Guid id, UpdateSubCategoryBody body, ICommandHandler<UpdateSubCategoryCommand> handler,
                         CancellationToken ct) =>
                     (await handler.Handle(new UpdateSubCategoryCommand(id, body.Name), ct)).ToHttpResponse())
             .WithName(ApiEndpoints.WithVersion(ApiEndpoints.SubCategories.UpdateSubCategory, ApiEndpoints.V1))

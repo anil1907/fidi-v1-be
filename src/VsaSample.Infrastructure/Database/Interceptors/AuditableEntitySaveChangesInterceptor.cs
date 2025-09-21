@@ -11,7 +11,7 @@ public sealed class AuditableEntitySaveChangesInterceptor(IUserContext userConte
         foreach (var entry in context.ChangeTracker.Entries<BaseEntity>()
                      .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
         {
-            var isNew = entry.Entity.Id == 0;
+            var isNew = entry.State == EntityState.Added;
             SetAuditFields(entry.Entity, isNew);
         }
     }
@@ -39,12 +39,12 @@ public sealed class AuditableEntitySaveChangesInterceptor(IUserContext userConte
         if (isNew)
         {
             entity.CreateDate = currentUtcDateTime;
-            entity.CreatedBy = userId;
+            entity.CreatedBy = userId == Guid.Empty ? null : userId;
         }
         else
         {
             entity.UpdateDate = currentUtcDateTime;
-            entity.UpdatedBy = userId;
+            entity.UpdatedBy = userId == Guid.Empty ? null : userId;
         }
     }
 }

@@ -21,7 +21,7 @@ public sealed class CategoryRepository : ICategoryRepository
 
     public IQueryable<Category> Query => _set.AsNoTracking();
 
-    public Task<Category?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+    public Task<Category?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var cacheKey = _tags.ById.Replace("{Id}", id.ToString());
         return _cache.GetOrCreateAsync(
@@ -31,7 +31,7 @@ public sealed class CategoryRepository : ICategoryRepository
             .AsTask();
     }
 
-    public async Task<long> AddAsync(Category entity, CancellationToken cancellationToken = default)
+    public async Task<Guid> AddAsync(Category entity, CancellationToken cancellationToken = default)
     {
         await _set.AddAsync(entity, cancellationToken);
         await _db.SaveChangesAsync(cancellationToken);

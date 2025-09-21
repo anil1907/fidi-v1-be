@@ -1,3 +1,3 @@
 namespace VsaSample.Application.Features.Categories.GetById;
 
-public sealed record GetCategoryByIdQuery(long Id) : IQuery<CategoryResponse>;
+public sealed record GetCategoryByIdQuery(Guid Id) : IQuery<CategoryResponse>;

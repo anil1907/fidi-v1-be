@@ -92,7 +92,7 @@ public static class CommonErrors
     public static string Unauthorized(string language = Cultures.En) =>
         GetMessage(UnauthorizedMessages, language);
 
-    public static string EntityNotFoundById(string entityNameEn, string entityNameTr, long id, string language = Cultures.En)
+    public static string EntityNotFoundById(string entityNameEn, string entityNameTr, Guid id, string language = Cultures.En)
     {
         var entityName = language == Cultures.Tr ? entityNameTr : entityNameEn;
         return string.Format(GetMessage(EntityNotFoundByIdMessages, language), entityName, id);

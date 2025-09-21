@@ -2,15 +2,18 @@ namespace VsaSample.Infrastructure.Authentication;
 
 public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
-    public long UserId =>
-        httpContextAccessor
-            .HttpContext?
-            .User
-            .GetUserId() ?? 0; // Its done for simplicity, ideally should throw exception if user is not authenticated
+    public Guid UserId
+    {
+        get
+        {
+            var principal = httpContextAccessor.HttpContext?.User;
+            return principal?.GetUserId() ?? Guid.Empty;
+        }
+    }
 
     public string Username =>
         httpContextAccessor
             .HttpContext?
             .User
-            .GetUserName() ?? ""; // Its done for simplicity, ideally should throw exception if user is not authenticated
+            .GetUserName() ?? string.Empty;
 }
