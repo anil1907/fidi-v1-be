@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VsaSample.Application.Features.Users.Register;
+using VsaSample.Domain.Entities;
+using VsaSample.Domain.Enums;
 using VsaSample.Infrastructure.Database.Application;
 using Xunit;
 
@@ -14,13 +17,16 @@ public class RegisterUserCommandHandlerTests
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
         await using var context = new ApplicationDbContext(options);
-        var handler = new RegisterUserCommandHandler(context);
-        var command = new RegisterUserCommand("john", "doe", "john@doe.com", "johnd", "Admin");
+        var handler = new RegisterUserCommandHandler(context, new PasswordHasher<User>());
+        var command = new RegisterUserCommand("john@doe.com", "john", "doe", "johnd", "P@ssw0rd!", UserRole.Admin);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
-        Assert.Equal(1, context.Users.Count());
+        var savedUser = await context.Users.SingleAsync();
+        Assert.Equal(UserRole.Admin, savedUser.Role);
+        Assert.NotEqual(command.Password, savedUser.PasswordHash);
+        Assert.False(string.IsNullOrWhiteSpace(savedUser.PasswordHash));
     }
 }
 

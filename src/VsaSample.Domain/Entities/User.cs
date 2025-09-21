@@ -12,5 +12,15 @@ public class User : BaseEntity
     
     public DateTime? LastLogin { get; set; }
     
-    public string Role { get; set; }  = string.Empty;
+    public UserRole Role { get; private set; } = UserRole.User;
+    
+    public string PasswordHash { get; private set; } = string.Empty;
+
+    public void SetRole(UserRole role) => Role = role;
+
+    public void SetPasswordHash(string passwordHash)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(passwordHash);
+        PasswordHash = passwordHash;
+    }
 }

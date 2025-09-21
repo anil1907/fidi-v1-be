@@ -4,6 +4,8 @@ using VsaSample.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog.Debugging;
 using VsaSample.Api;
+using Microsoft.AspNetCore.Http.Json;
+using VsaSample.Infrastructure.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,11 @@ builder.Services.Configure<DbInterceptorOptions>(builder.Configuration.GetSectio
 builder.Services.Configure<LdapOptions>(builder.Configuration.GetSection(ConfigSections.Ldap));
 builder.Services.Configure<FtpOptions>(builder.Configuration.GetSection(ConfigSections.Ftp));
 
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 var jwtOptions = builder.Configuration.GetSection(ConfigSections.Jwt).Get<JwtOptions>()!;
 var redisOptions = builder.Configuration.GetSection(ConfigSections.Redis).Get<RedisOptions>()!;
 var corsOptions = builder.Configuration.GetSection(ConfigSections.Cors).Get<CorsOptions>()!;
@@ -38,6 +45,8 @@ builder.Services
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
+
+await app.ApplyMigrationsAsync();
 
 app.MapHealthChecks("health", new HealthCheckOptions
 {

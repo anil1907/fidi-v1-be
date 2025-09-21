@@ -15,6 +15,6 @@ public class ApplicationDbContextTests
 
         using var context = new ApplicationDbContext(options);
 
-        Assert.Equal("dbo", context.Model.GetDefaultSchema());
+        Assert.Equal("public", context.Model.GetDefaultSchema());
     }
 }

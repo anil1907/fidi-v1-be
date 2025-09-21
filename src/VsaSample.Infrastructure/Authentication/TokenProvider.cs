@@ -38,7 +38,7 @@ public class TokenProvider(IOptions<JwtOptions> options) : ITokenProvider
         new Dictionary<string, object>
         {
             [ClaimTypes.NameIdentifier] = user.Id,
-            [ClaimTypes.Role] = user.Role,
+            [ClaimTypes.Role] = user.Role.ToString(),
             [ClaimTypes.Name] = user.FirstName,
             [ClaimTypes.Surname] = user.LastName,
             [ClaimTypes.Email] = user.Email,

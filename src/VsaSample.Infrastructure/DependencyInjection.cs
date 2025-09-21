@@ -5,6 +5,7 @@ using VsaSample.Infrastructure.Database.Interceptors;
 using VsaSample.Infrastructure.Excel;
 using VsaSample.Infrastructure.FileTransfer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Refit;
 using Sieve.Services;
 using VsaSample.Application.Abstractions.HttpClients;
@@ -104,6 +105,7 @@ public static class DependencyInjection
             .AddScoped<ICacheService, CacheService>()
             .AddScoped<IExcelHelper, ExcelHelper>()
             .AddScoped<ILdapManager, LdapManager>()
+            .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IFileTransferHelper, FtpHelper>();

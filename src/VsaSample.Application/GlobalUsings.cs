@@ -1,4 +1,5 @@
 global using FluentValidation;
+global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
 global using Sieve.Models;
@@ -13,6 +14,7 @@ global using VsaSample.Application.Features.Products.Shared;
 global using VsaSample.Application.Features.SubCategories.Shared;
 global using VsaSample.Application.Messaging;
 global using VsaSample.Domain.Entities;
+global using VsaSample.Domain.Enums;
 global using VsaSample.SharedKernel.Constants;
 global using VsaSample.SharedKernel.Constants.Entities;
 global using VsaSample.SharedKernel.Constants.ValidationMessages;

@@ -14,6 +14,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         modelBuilder.HasDefaultSchema(Schemas.Default);
+
+        modelBuilder.Entity<User>(builder =>
+        {
+            builder.Property(u => u.Role)
+                .HasConversion<string>()
+                .HasMaxLength(32);
+
+            builder.Property(u => u.PasswordHash)
+                .HasColumnName("Password")
+                .IsRequired()
+                .HasMaxLength(256);
+        });
     }
-    
 }

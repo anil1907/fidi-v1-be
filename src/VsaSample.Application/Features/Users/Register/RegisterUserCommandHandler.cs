@@ -1,6 +1,8 @@
 namespace VsaSample.Application.Features.Users.Register;
 
-public sealed class RegisterUserCommandHandler(IApplicationDbContext context)
+public sealed class RegisterUserCommandHandler(
+    IApplicationDbContext context,
+    IPasswordHasher<User> passwordHasher)
     : ICommandHandler<RegisterUserCommand, long>
 {
     public async Task<Result<long>> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
@@ -16,9 +18,12 @@ public sealed class RegisterUserCommandHandler(IApplicationDbContext context)
             Email = command.Email,
             FirstName = command.FirstName,
             LastName = command.LastName,
-            Username = command.Username,
-            Role = command.Role
+            Username = command.Username
         };
+
+        user.SetRole(command.Role);
+        var passwordHash = passwordHasher.HashPassword(user, command.Password);
+        user.SetPasswordHash(passwordHash);
 
         context.Users.Add(user);
 
