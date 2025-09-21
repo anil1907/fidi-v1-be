@@ -29,13 +29,10 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
         {
-            options.UseInMemoryDatabase("AppDb");
+            // options.UseInMemoryDatabase("AppDb");
+            options.UseNpgsql(connectionString);
             // options.UseSqlServer(configuration.GetConnectionString("ApplicationConnection")!, sqlServerOptions =>
             //     sqlServerOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, Schemas.Default));
-            // options.UseOracle(connectionString, o => o.CommandTimeout(5))
-            //     .AddInterceptors(sp.GetRequiredService<SlowCommandInterceptor>())
-            //     .UseLoggerFactory(sp.GetRequiredService<ILoggerFactory>())
-            //     .EnableSensitiveDataLogging();
 
             options.AddInterceptors(sp.GetRequiredService<AuditableEntitySaveChangesInterceptor>());
             options.AddInterceptors(sp.GetRequiredService<SlowCommandInterceptor>());
@@ -52,7 +49,7 @@ public static class DependencyInjection
     {
         services
             .AddHealthChecks()
-            .AddOracle(connectionString);
+            .AddNpgSql(connectionString);
 
         services.Scan(scan => scan.FromAssembliesOf(typeof(SieveProcessor))
             .AddClasses(classes => classes.AssignableTo(typeof(ISieveProcessor)), publicOnly: false)
