@@ -31,6 +31,15 @@ internal static class ApiEndpoints
         public const string UpdateProduct = "UpdateProduct";
     }
 
+    internal static class Clients
+    {
+        public const string CreateClient = "CreateClient";
+        public const string DeleteClient = "DeleteClient";
+        public const string GetClientsPaged = "GetClientsPaged";
+        public const string GetClientById = "GetClientById";
+        public const string UpdateClient = "UpdateClient";
+    }
+
     internal static class SubCategories
     {
         public const string CreateSubCategory = "CreateSubCategory";

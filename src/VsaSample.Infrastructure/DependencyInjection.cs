@@ -107,6 +107,7 @@ public static class DependencyInjection
             .AddScoped<ILdapManager, LdapManager>()
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
+            .AddScoped<IClientRepository, ClientRepository>()
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IFileTransferHelper, FtpHelper>();
 
