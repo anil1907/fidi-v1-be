@@ -6,6 +6,9 @@ public interface IApplicationDbContext
 
     public DbSet<Client> Clients { get; set; }
 
+    public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<Template> Templates { get; set; }
+
     public DbSet<Category> Categories { get; set; }
 
     public DbSet<SubCategory> SubCategories { get; set; }
@@ -16,3 +19,4 @@ public interface IApplicationDbContext
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
+

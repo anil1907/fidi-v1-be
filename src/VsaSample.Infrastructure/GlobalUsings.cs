@@ -19,3 +19,4 @@ global using VsaSample.Infrastructure.Database.Application;
 global using VsaSample.Infrastructure.Options;
 global using VsaSample.SharedKernel.Caching;
 global using VsaSample.SharedKernel.Constants;
+global using VsaSample.Domain.Entities.Templates;

@@ -40,6 +40,15 @@ internal static class ApiEndpoints
         public const string UpdateClient = "UpdateClient";
     }
 
+    internal static class Appointments
+    {
+        public const string CreateAppointment = "CreateAppointment";
+        public const string DeleteAppointment = "DeleteAppointment";
+        public const string GetAppointmentsPaged = "GetAppointmentsPaged";
+        public const string GetAppointmentById = "GetAppointmentById";
+        public const string UpdateAppointment = "UpdateAppointment";
+    }
+
     internal static class SubCategories
     {
         public const string CreateSubCategory = "CreateSubCategory";
@@ -49,6 +58,15 @@ internal static class ApiEndpoints
         public const string UpdateSubCategory = "UpdateSubCategory";
         public const string ExportSubCategories = "ExportSubCategories";
         public const string ImportSubCategories = "ImportSubCategories";
+    }
+    
+    internal static class Templates
+    {
+        public const string CreateTemplate = "CreateTemplate";
+        public const string DeleteTemplate = "DeleteTemplate";
+        public const string GetTemplatesPaged = "GetTemplatesPage";
+        public const string GetTemplateById = "GetTemplateById";
+        public const string UpdateTemplate = "UpdateTemplate";
     }
 
     internal static class Pokemons

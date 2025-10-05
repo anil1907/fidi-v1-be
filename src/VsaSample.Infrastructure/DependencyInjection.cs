@@ -108,6 +108,8 @@ public static class DependencyInjection
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<IClientRepository, ClientRepository>()
+            .AddScoped<IAppointmentRepository, AppointmentRepository>()
+            .AddScoped<ITemplateRepository, TemplateRepository>()
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IFileTransferHelper, FtpHelper>();
 
@@ -151,3 +153,4 @@ public static class DependencyInjection
         return services;
     }
 }
+

@@ -28,4 +28,7 @@
   <ItemGroup>
       <ProjectReference Include="../VsaSample.Application/VsaSample.Application.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\Persistence\Migrations\" />
+  </ItemGroup>
 </Project>

@@ -21,3 +21,4 @@ global using VsaSample.SharedKernel.Constants.ValidationMessages;
 global using VsaSample.SharedKernel.Errors;
 global using VsaSample.SharedKernel.Features;
 global using VsaSample.SharedKernel.Results;
+global using VsaSample.Domain.Entities.Templates;
