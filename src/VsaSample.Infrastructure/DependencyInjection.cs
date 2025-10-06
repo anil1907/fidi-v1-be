@@ -109,6 +109,7 @@ public static class DependencyInjection
             .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<IClientRepository, ClientRepository>()
             .AddScoped<IAppointmentRepository, AppointmentRepository>()
+            .AddScoped<IDietPlanRepository, DietPlanRepository>()
             .AddScoped<ITemplateRepository, TemplateRepository>()
             .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IFileTransferHelper, FtpHelper>();
@@ -153,4 +154,3 @@ public static class DependencyInjection
         return services;
     }
 }
-

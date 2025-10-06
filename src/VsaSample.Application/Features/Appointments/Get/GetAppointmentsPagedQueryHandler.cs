@@ -1,3 +1,5 @@
+using VsaSample.SharedKernel.Extensions;
+
 namespace VsaSample.Application.Features.Appointments.Get;
 
 using VsaSample.Application.Features.Appointments.Shared;
@@ -25,12 +27,14 @@ internal sealed class GetAppointmentsPagedQueryHandler(
 
         if (query.StartsAfter is not null)
         {
-            source = source.Where(a => a.StartsAt >= query.StartsAfter);
+            var startsAfter = query.StartsAfter.Value.EnsureUtc();
+            source = source.Where(a => a.StartsAt >= startsAfter);
         }
 
         if (query.EndsBefore is not null)
         {
-            source = source.Where(a => a.EndsAt <= query.EndsBefore);
+            var endsBefore = query.EndsBefore.Value.EnsureUtc();
+            source = source.Where(a => a.EndsAt <= endsBefore);
         }
 
         if (!string.IsNullOrWhiteSpace(query.Search))

@@ -12,6 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<User> Users { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<DietPlan> DietPlans { get; set; }
     public DbSet<Template> Templates { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
@@ -28,6 +29,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         ConfigureAppointments(modelBuilder);
         ConfigureClients(modelBuilder);
         ConfigureTemplates(modelBuilder);
+        ConfigureDietPlans(modelBuilder);
     }
 
     private static void ConfigureUsers(ModelBuilder modelBuilder)
@@ -118,12 +120,53 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             sectionsProperty.Metadata.SetValueComparer(new ValueComparer<List<TemplateSection>>(
                 (left, right) => TemplateSectionsEqual(left, right),
                 sections => TemplateSectionsHash(sections),
-                sections => TemplateSectionsClone(sections))); 
+                sections => TemplateSectionsClone(sections)));
 
             builder.HasIndex(t => t.Name).IsUnique();
         });
     }
 
+    private static void ConfigureDietPlans(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<DietPlan>(builder =>
+        {
+            builder.Property(p => p.Name).HasMaxLength(256);
+            builder.Property(p => p.Notes).HasMaxLength(2048);
+
+            builder.Property(p => p.DateStart)
+                .HasColumnType("date");
+
+            builder.Property(p => p.DateEnd)
+                .HasColumnType("date");
+
+            var sectionsProperty = builder.Property(p => p.Sections)
+                .HasColumnType("jsonb")
+                .HasConversion(
+                    sections => JsonSerializer.Serialize(sections, TemplateSerializerOptions),
+                    json => string.IsNullOrWhiteSpace(json)
+                        ? new List<TemplateSection>()
+                        : JsonSerializer.Deserialize<List<TemplateSection>>(json, TemplateSerializerOptions) ?? new List<TemplateSection>());
+
+            sectionsProperty.Metadata.SetValueComparer(new ValueComparer<List<TemplateSection>>(
+                (left, right) => TemplateSectionsEqual(left, right),
+                sections => TemplateSectionsHash(sections),
+                sections => TemplateSectionsClone(sections)));
+
+            builder.HasIndex(p => p.ClientId);
+            builder.HasIndex(p => p.TemplateId);
+            builder.HasIndex(p => p.DateStart);
+
+            builder.HasOne(p => p.Client)
+                .WithMany()
+                .HasForeignKey(p => p.ClientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(p => p.Template)
+                .WithMany()
+                .HasForeignKey(p => p.TemplateId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
     private static bool TemplateSectionsEqual(List<TemplateSection>? left, List<TemplateSection>? right) =>
         JsonSerializer.Serialize(left ?? new List<TemplateSection>(), TemplateSerializerOptions) ==
         JsonSerializer.Serialize(right ?? new List<TemplateSection>(), TemplateSerializerOptions);

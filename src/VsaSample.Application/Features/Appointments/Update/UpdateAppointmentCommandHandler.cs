@@ -1,3 +1,5 @@
+using VsaSample.SharedKernel.Extensions;
+
 namespace VsaSample.Application.Features.Appointments.Update;
 
 internal sealed class UpdateAppointmentCommandHandler(
@@ -28,8 +30,8 @@ internal sealed class UpdateAppointmentCommandHandler(
         appointment.ClientId = request.ClientId;
         appointment.Title = request.Title.Trim();
         appointment.Description = request.Description;
-        appointment.StartsAt = request.StartsAt;
-        appointment.EndsAt = request.EndsAt;
+        appointment.StartsAt = request.StartsAt.EnsureUtc();
+        appointment.EndsAt = request.EndsAt.EnsureUtc();
         appointment.UpdateStatus(request.Status);
 
         if (request.IsActive.HasValue)

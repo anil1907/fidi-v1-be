@@ -1,3 +1,5 @@
+using VsaSample.SharedKernel.Extensions;
+
 namespace VsaSample.Application.Features.Appointments.Create;
 
 public sealed class CreateAppointmentCommandHandler(
@@ -23,8 +25,8 @@ public sealed class CreateAppointmentCommandHandler(
             ClientId = request.ClientId,
             Title = request.Title.Trim(),
             Description = request.Description,
-            StartsAt = request.StartsAt,
-            EndsAt = request.EndsAt,
+            StartsAt = request.StartsAt.EnsureUtc(),
+            EndsAt = request.EndsAt.EnsureUtc(),
 
             IsActive = true
         };

@@ -69,6 +69,15 @@ internal static class ApiEndpoints
         public const string UpdateTemplate = "UpdateTemplate";
     }
 
+    internal static class DietPlans
+    {
+        public const string CreateDietPlan = "CreateDietPlan";
+        public const string DeleteDietPlan = "DeleteDietPlan";
+        public const string GetDietPlansPaged = "GetDietPlansPaged";
+        public const string GetDietPlanById = "GetDietPlanById";
+        public const string UpdateDietPlan = "UpdateDietPlan";
+    }
+
     internal static class Pokemons
     {
         public const string GetPokemons = "GetPokemons";
