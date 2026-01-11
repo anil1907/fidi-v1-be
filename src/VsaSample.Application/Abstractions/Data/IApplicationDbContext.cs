@@ -10,14 +10,7 @@ public interface IApplicationDbContext
 
     public DbSet<DietPlan> DietPlans { get; set; }
     public DbSet<Template> Templates { get; set; }
-
-    public DbSet<Category> Categories { get; set; }
-
-    public DbSet<SubCategory> SubCategories { get; set; }
-
-    public DbSet<Product> Products { get; set; }
-
-    public DbSet<ProductTranslation> ProductTranslation { get; set; }
+    public DbSet<Organization> Organizations { get; set; }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -23,6 +23,40 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("VsaSample.Domain.Entities.Organization", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<DateTime?>("UpdateDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Organizations", "public");
+                });
+
             modelBuilder.Entity("VsaSample.Domain.Entities.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -30,6 +64,9 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("OrganizationId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreateDate")
@@ -69,6 +106,10 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrganizationId", "ClientId");
+
+                    b.HasIndex("OrganizationId", "Id");
+
                     b.HasIndex("ClientId");
 
                     b.HasIndex("EndsAt");
@@ -76,36 +117,6 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                     b.HasIndex("StartsAt");
 
                     b.ToTable("Appointments", "public");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.Category", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories", "public");
                 });
 
             modelBuilder.Entity("VsaSample.Domain.Entities.Client", b =>
@@ -145,6 +156,9 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(32)
@@ -157,6 +171,8 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId", "Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -197,6 +213,9 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Sections")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -212,6 +231,10 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrganizationId", "ClientId");
+
+                    b.HasIndex("OrganizationId", "Id");
+
                     b.HasIndex("ClientId");
 
                     b.HasIndex("DateStart");
@@ -219,126 +242,6 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                     b.HasIndex("TemplateId");
 
                     b.ToTable("DietPlans", "public");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Sku")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Products", "public");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.ProductTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Culture")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductTranslation", "public");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.SubCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("SubCategories", "public");
                 });
 
             modelBuilder.Entity("VsaSample.Domain.Entities.Templates.Template", b =>
@@ -365,6 +268,9 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Sections")
                         .IsRequired()
                         .HasColumnType("jsonb");
@@ -376,6 +282,8 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId", "Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -413,6 +321,9 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("OrganizationId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -436,6 +347,8 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrganizationId", "Id");
+
                     b.ToTable("Users", "public");
                 });
 
@@ -447,7 +360,26 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("VsaSample.Domain.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("VsaSample.Domain.Entities.Client", b =>
+                {
+                    b.HasOne("VsaSample.Domain.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("VsaSample.Domain.Entities.DietPlan", b =>
@@ -458,6 +390,12 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("VsaSample.Domain.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("VsaSample.Domain.Entities.Templates.Template", "Template")
                         .WithMany()
                         .HasForeignKey("TemplateId")
@@ -466,62 +404,31 @@ namespace VsaSample.Infrastructure.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Client");
 
+                    b.Navigation("Organization");
+
                     b.Navigation("Template");
                 });
 
-            modelBuilder.Entity("VsaSample.Domain.Entities.Product", b =>
+            modelBuilder.Entity("VsaSample.Domain.Entities.Templates.Template", b =>
                 {
-                    b.HasOne("VsaSample.Domain.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("VsaSample.Domain.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Organization");
                 });
 
-            modelBuilder.Entity("VsaSample.Domain.Entities.ProductTranslation", b =>
+            modelBuilder.Entity("VsaSample.Domain.Entities.User", b =>
                 {
-                    b.HasOne("VsaSample.Domain.Entities.Product", "ProductRef")
-                        .WithMany("Translations")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("VsaSample.Domain.Entities.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ProductRef");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.SubCategory", b =>
-                {
-                    b.HasOne("VsaSample.Domain.Entities.Category", "Category")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("VsaSample.Domain.Entities.Product", "Product")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
-
-                    b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("VsaSample.Domain.Entities.Product", b =>
-                {
-                    b.Navigation("SubCategories");
-
-                    b.Navigation("Translations");
+                    b.Navigation("Organization");
                 });
 #pragma warning restore 612, 618
         }

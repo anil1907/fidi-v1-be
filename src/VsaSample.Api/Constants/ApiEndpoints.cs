@@ -13,24 +13,6 @@ internal static class ApiEndpoints
         public const string Register = "Register";
     }
 
-    internal static class Categories
-    {
-        public const string CreateCategory = "CreateCategory";
-        public const string DeleteCategory = "DeleteCategory";
-        public const string GetCategoriesPage = "GetCategoriesPage";
-        public const string GetCategoryById = "GetCategoryById";
-        public const string UpdateCategory = "UpdateCategory";
-    }
-
-    internal static class Products
-    {
-        public const string CreateProduct = "CreateProduct";
-        public const string DeleteProduct = "DeleteProduct";
-        public const string GetProductsPaged = "GetProductsPaged";
-        public const string GetProductById = "GetProductById";
-        public const string UpdateProduct = "UpdateProduct";
-    }
-
     internal static class Clients
     {
         public const string CreateClient = "CreateClient";
@@ -47,17 +29,6 @@ internal static class ApiEndpoints
         public const string GetAppointmentsPaged = "GetAppointmentsPaged";
         public const string GetAppointmentById = "GetAppointmentById";
         public const string UpdateAppointment = "UpdateAppointment";
-    }
-
-    internal static class SubCategories
-    {
-        public const string CreateSubCategory = "CreateSubCategory";
-        public const string DeleteSubCategory = "DeleteSubCategory";
-        public const string GetSubCategoriesPage = "GetSubCategoriesPage";
-        public const string GetSubCategoryById = "GetSubCategoryById";
-        public const string UpdateSubCategory = "UpdateSubCategory";
-        public const string ExportSubCategories = "ExportSubCategories";
-        public const string ImportSubCategories = "ImportSubCategories";
     }
     
     internal static class Templates

@@ -106,12 +106,10 @@ public static class DependencyInjection
             .AddScoped<IExcelHelper, ExcelHelper>()
             .AddScoped<ILdapManager, LdapManager>()
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
-            .AddScoped<ICategoryRepository, CategoryRepository>()
             .AddScoped<IClientRepository, ClientRepository>()
             .AddScoped<IAppointmentRepository, AppointmentRepository>()
             .AddScoped<IDietPlanRepository, DietPlanRepository>()
             .AddScoped<ITemplateRepository, TemplateRepository>()
-            .AddScoped<IProductRepository, ProductRepository>()
             .AddScoped<IFileTransferHelper, FtpHelper>();
 
         services.Scan(scan => scan.FromAssembliesOf(typeof(DependencyInjection))

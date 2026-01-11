@@ -2,6 +2,7 @@ namespace VsaSample.Domain.Enums;
 
 public enum UserRole
 {
-    User = 0,
-    Admin = 1
+    Dietitian = 0,
+    OrgAdmin = 1,
+    SuperAdmin = 2
 }

@@ -1,7 +1,10 @@
 namespace VsaSample.Domain.Entities;
 
-public class User : BaseEntity
+public class User : BaseEntity, IOrganizationScoped
 {
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+
     public string Email { get; set; }  = string.Empty;
     
     public string FirstName { get; set; }  = string.Empty;
@@ -12,7 +15,7 @@ public class User : BaseEntity
     
     public DateTime? LastLogin { get; set; }
     
-    public UserRole Role { get; private set; } = UserRole.User;
+    public UserRole Role { get; private set; } = UserRole.Dietitian;
     
     public string PasswordHash { get; private set; } = string.Empty;
 

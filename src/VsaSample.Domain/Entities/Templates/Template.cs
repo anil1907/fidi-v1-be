@@ -1,9 +1,14 @@
 using System.Text.Json.Serialization;
+using VsaSample.Domain.Entities;
 
 namespace VsaSample.Domain.Entities.Templates;
 
-public sealed class Template : BaseEntity
+public sealed class Template : BaseEntity, IOrganizationScoped
 {
+    [Sieve(CanFilter = true, CanSort = true)]
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+
     [Sieve(CanFilter = true, CanSort = true)]
     public string Name { get; private set; } = string.Empty;
 

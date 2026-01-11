@@ -39,9 +39,11 @@ public class TokenProvider(IOptions<JwtOptions> options) : ITokenProvider
         {
             [ClaimTypes.NameIdentifier] = user.Id.ToString(),
             [ClaimTypes.Role] = user.Role.ToString(),
+            ["role"] = user.Role.ToString(),
             [ClaimTypes.Name] = user.FirstName,
             [ClaimTypes.Surname] = user.LastName,
             [ClaimTypes.Email] = user.Email,
-            ["Username"] = user.Username
+            ["Username"] = user.Username,
+            ["org_id"] = user.OrganizationId.ToString()
         };
 }

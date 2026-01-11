@@ -1,7 +1,11 @@
 namespace VsaSample.Domain.Entities;
 
-public sealed class Appointment : BaseEntity
+public sealed class Appointment : BaseEntity, IOrganizationScoped
 {
+    [Sieve(CanFilter = true, CanSort = true)]
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+
     [Sieve(CanFilter = true, CanSort = true)]
     public Guid ClientId { get; set; }
     public Client Client { get; set; } = null!;

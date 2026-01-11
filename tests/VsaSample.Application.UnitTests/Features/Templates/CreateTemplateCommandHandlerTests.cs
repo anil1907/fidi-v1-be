@@ -7,6 +7,7 @@ using VsaSample.Infrastructure.Database;
 using VsaSample.Infrastructure.Database.Application;
 using VsaSample.SharedKernel.Errors;
 using Xunit;
+using VsaSample.Application.UnitTests;
 
 namespace VsaSample.Application.UnitTests.Features.Templates;
 
@@ -15,10 +16,11 @@ public class CreateTemplateCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldCreateTemplate()
     {
+        var organizationContext = new TestOrganizationContext(Guid.NewGuid());
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        await using var context = new ApplicationDbContext(options);
+        await using var context = new ApplicationDbContext(options, organizationContext);
         var repository = new TemplateRepository(context, new NoOpCacheService());
 
         var sections = new[]
@@ -45,10 +47,11 @@ public class CreateTemplateCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldFail_WhenNameDuplicate()
     {
+        var organizationContext = new TestOrganizationContext(Guid.NewGuid());
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        await using var context = new ApplicationDbContext(options);
+        await using var context = new ApplicationDbContext(options, organizationContext);
         context.Templates.Add(new Template("Sample", null));
         await context.SaveChangesAsync();
         var repository = new TemplateRepository(context, new NoOpCacheService());

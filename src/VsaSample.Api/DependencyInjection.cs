@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using VsaSample.Api.Authentication;
+using VsaSample.Application.Abstractions.Authentication;
 using StackExchange.Redis;
 using VsaSample.Api.Handlers;
 using VsaSample.Api.OpenApi;
@@ -9,6 +11,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
+        services.AddScoped<IOrganizationContext, OrganizationContext>();
         services.AddEndpointsApiExplorer();
         services.AddApiVersioning(options =>
             {
@@ -74,3 +77,4 @@ public static class DependencyInjection
         return services;
     }
 }
+

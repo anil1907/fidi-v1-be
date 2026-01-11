@@ -2,8 +2,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VsaSample.Domain.Entities;
 
-public sealed class Client : BaseEntity
+public sealed class Client : BaseEntity, IOrganizationScoped
 {
+    [Sieve(CanFilter = true, CanSort = true)]
+    public Guid OrganizationId { get; set; }
+    public Organization Organization { get; set; } = null!;
+
     [Sieve(CanFilter = true, CanSort = true)]
     public string FirstName { get; set; } = string.Empty;
 

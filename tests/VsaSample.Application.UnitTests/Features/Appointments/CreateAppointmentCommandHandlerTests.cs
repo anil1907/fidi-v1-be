@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using VsaSample.Application.Features.Appointments.Create;
 using VsaSample.Infrastructure.Database.Application;
 using Xunit;
+using VsaSample.Application.UnitTests;
 
 namespace VsaSample.Application.UnitTests.Features.Appointments;
 
@@ -14,10 +15,11 @@ public class CreateAppointmentCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldCreateAppointment()
     {
+        var organizationContext = new TestOrganizationContext(Guid.NewGuid());
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        await using var context = new ApplicationDbContext(options);
+        await using var context = new ApplicationDbContext(options, organizationContext);
         var clientId = Guid.NewGuid();
         context.Clients.Add(new Client { Id = clientId, FirstName = "Test", LastName = "Client", Email = "test@example.com", Phone = "123", IsActive = true });
         await context.SaveChangesAsync();
@@ -36,10 +38,11 @@ public class CreateAppointmentCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldFail_WhenEndBeforeStart()
     {
+        var organizationContext = new TestOrganizationContext(Guid.NewGuid());
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        await using var context = new ApplicationDbContext(options);
+        await using var context = new ApplicationDbContext(options, organizationContext);
         var clientId = Guid.NewGuid();
         context.Clients.Add(new Client { Id = clientId, FirstName = "Test", LastName = "Client", Email = "test@example.com", Phone = "123", IsActive = true });
         await context.SaveChangesAsync();
