@@ -37,7 +37,7 @@ public static class DependencyInjection
                     BearerFormat = "JWT",
                     Reference = new OpenApiReference
                     {
-                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Id = AuthConstants.KeycloakScheme,
                         Type = ReferenceType.SecurityScheme
                     }
                 };

@@ -8,6 +8,8 @@ public static class ConfigSections
     public const string Jwt = "Jwt";
     public const string Ldap = "Ldap";
     public const string Ftp = "Ftp";
+    public const string Keycloak = "Keycloak";
+    public const string Spa = "Spa";
 
     public static class Database
     {

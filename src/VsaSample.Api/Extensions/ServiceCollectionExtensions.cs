@@ -7,14 +7,17 @@ public static class ServiceCollectionExtensions
     {
         return services.AddCors(options =>
         {
-            options.AddDefaultPolicy(builder =>
+            void ConfigurePolicy(Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicyBuilder builder)
             {
                 builder.WithOrigins(corsOptions!.AllowOrigins.ToArray() ?? [])
                     .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
-            });
+            }
+
+            options.AddPolicy(CorsPolicies.Spa, ConfigurePolicy);
+            options.AddDefaultPolicy(ConfigurePolicy);
         });
     }
 }
